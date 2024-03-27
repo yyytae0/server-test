@@ -14,3 +14,7 @@ socket(server);
 server.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });
+
+app.get('/', (req, res) => {
+  res.send('서버 페이지')
+})
