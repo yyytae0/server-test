@@ -5,7 +5,7 @@ export interface message {
 
 export interface createRoomData {
   roomName: string;
-  nickName: string;
+  nickname: string;
   max: number;
   range: number[];
   total: number;

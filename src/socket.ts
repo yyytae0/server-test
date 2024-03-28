@@ -8,6 +8,7 @@ const interval = 3000;
 let rooms: room[] = [];
 let users: user[] = [];
 let roomsInfo: roomsInfo = {};
+let roomsMusic: {[roomId: string]: []} = {};
 
 const socket = (server: http.Server) => {
   const io = new Server(server, {
@@ -40,20 +41,22 @@ const socket = (server: http.Server) => {
         roomName: data.roomName,
         max: data.max,
         range: data.range,
-        total: data.total
+        total: data.total,
+        nickname: data.nickname
       });
       roomsInfo[socket.id] = {
         now: 0,
         musicList: [],
         players: [{
           id: socket.id,
-          nickname: data.nickName,
+          nickname: data.nickname,
           score: 0
         }],
         max: data.max,
         total: data.total,
         range: data.range,
-        id: socket.id
+        id: socket.id,
+        roomName: data.roomName
       };
       socket.join(socket.id);
       socket.leave("wait");
@@ -99,6 +102,24 @@ const socket = (server: http.Server) => {
         socket.to('wait').emit("getRooms", rooms);
       }
     });
+
+    socket.on('disconnecting', () => {
+      users = users.filter((user) => user.id !== socket.id);
+      const roomId = [...socket.rooms][0]
+      if (!roomsInfo[roomId]) return
+      roomsInfo[roomId].players = roomsInfo[roomId].players.filter((player) => player.id !== socket.id);
+      if (roomsInfo[roomId].players.length === 0 ) {
+        rooms = rooms.filter((item) => {
+          return item.id !== roomId;
+        });
+        io.to("wait").emit("getRooms", rooms);
+        return
+      }
+      socket.to(roomId).emit('getRoomDetail', roomsInfo[roomId]);
+      const roomIdx = rooms.findIndex((room) => room.id === roomId);
+      rooms[roomIdx].now -= 1;
+      socket.to('wait').emit("getRooms", rooms);
+    })
   });
 };
 

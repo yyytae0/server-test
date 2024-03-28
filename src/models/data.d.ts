@@ -1,11 +1,12 @@
 export interface room {
 	id: string;              // 방 생성자의 socket id
-	roomName: string;            // 노출 방 이름
+	roomName: string;        // 노출 방 이름
 	max: number;             // 설정 최대 인원
 	range: number[];         // 선택 년도
 	now: number;             // 현재 참여 인원
 	isPlaying: boolean;      // 현재 게임중 여부
 	total: number;           // 게임에서 사용될 노래 수
+	nickname: string;        // 게임을 생성한 사람의 이름
 }
 
 export interface user {
@@ -25,6 +26,7 @@ export interface roomInfo {
 	total: number;
 	range: number[];
 	id: string;
+	roomName: string;
 }
 
 export interface music {
