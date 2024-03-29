@@ -1,8 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
-import { createServer } from "http";
+import { createServer } from "https";
 import socket from './socket'
-
 
 dotenv.config();
 
