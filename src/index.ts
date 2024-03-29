@@ -1,6 +1,6 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
-import { createServer } from "https";
+import { createServer } from "http";
 import socket from './socket'
 
 dotenv.config();
